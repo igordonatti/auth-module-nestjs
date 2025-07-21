@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
   Controller,
   HttpCode,
@@ -30,5 +29,19 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   validateToken(@Body() body: { token: string }) {
     return this.authService.validateToken(body.token);
+  }
+
+  @isPublic()
+  @Post('forgot-password')
+  async forgotPassword(@Body() { email }: { email: string }) {
+    return await this.authService.forgotPassword(email);
+  }
+
+  @isPublic()
+  @Post('reset-password')
+  async resetPassword(
+    @Body() { token, password }: { token: string; password: string },
+  ) {
+    return await this.authService.resetPassword(token, password);
   }
 }

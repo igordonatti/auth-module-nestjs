@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/databases/prisma.service';
 import * as bcrypt from 'bcrypt';
@@ -48,6 +44,21 @@ export class UserService {
       ...user,
       password: undefined,
       message: 'User created successfully',
+    };
+  }
+
+  async updatePassword(email: string, password: string) {
+    const user = await this.prisma.user.update({
+      where: { email },
+      data: {
+        password: await bcrypt.hash(password, 10),
+        resetToken: null,
+      },
+    });
+
+    return {
+      ...user,
+      password: undefined,
     };
   }
 }
