@@ -2,7 +2,6 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class EmailService {
@@ -11,17 +10,17 @@ export class EmailService {
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
-    private readonly userService: UserService,
     private readonly mailerService: MailerService,
   ) {}
 
   private sendEmail(params: { to: string; subject: string; text: string }) {
     try {
+      const from = `${this.configService.get('MAILGUN_FROM')}`;
       this.logger.log(`Email sent out to `, params.to);
 
       const sendMailParams = {
         to: params.to,
-        from: 'igordonatti.id@gmail.com',
+        from,
         subject: params.subject,
         text: params.text,
       };

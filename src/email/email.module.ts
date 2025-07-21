@@ -30,7 +30,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
           },
         },
         defaults: {
-          from: 'igordonatti.id@gmail.com',
+          from: configService.get('MAILGUN_FROM'),
         },
       }),
     }),
